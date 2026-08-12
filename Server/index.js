@@ -10,7 +10,7 @@ App.use(cors())
 App.use("/api/admin",adminRoutes)
 // http://localhost:8000/api/admin
 
-
+App.use("/upload/Category",express.static("upload/Category"))
 
 App.listen(process.env.PORT,async ()=>{
     await dbConnection();
