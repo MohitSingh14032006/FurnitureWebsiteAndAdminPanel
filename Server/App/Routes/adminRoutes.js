@@ -4,6 +4,8 @@ const materialRoute = require("./admin/materialRoute")
 const countryRoute = require("./admin/countryRoute")
 const faqRoute = require("./admin/faqRoute")
 const categoryRoute = require("./admin/categoryRoute")
+const sliderRoute = require("./admin/sliderRoute")
+const testimonialRoute = require("./admin/testimonialRoute")
 
 let adminRoutes = express.Router()
 
@@ -21,5 +23,11 @@ adminRoutes.use("/faq",faqRoute)
 
 adminRoutes.use("/category",categoryRoute)
 // http://localhost:8000/api/admin/category
+
+adminRoutes.use('/slider',sliderRoute)
+//http://localhost:8000/api/admin/slider
+
+adminRoutes.use('/testimonial',testimonialRoute)
+//http://localhost:8000/api/admin/testimonial
 
 module.exports = adminRoutes

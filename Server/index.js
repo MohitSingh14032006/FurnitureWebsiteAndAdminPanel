@@ -11,6 +11,8 @@ App.use("/api/admin",adminRoutes)
 // http://localhost:8000/api/admin
 
 App.use("/upload/Category",express.static("upload/Category"))
+App.use("/upload/Slider",express.static("upload/Slider"))
+App.use("/upload/Testimonial",express.static("upload/Testimonial"))
 
 App.listen(process.env.PORT,async ()=>{
     await dbConnection();

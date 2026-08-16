@@ -1,7 +1,35 @@
-import React from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { FaFilter } from "react-icons/fa";
+import { FaFilterCircleXmark } from "react-icons/fa6";
 import { MdEdit } from "react-icons/md";
 
 export default function ViewSlider() {
+  let apiBaseUrl = import.meta.env.VITE_APIBASEURL;
+
+  const [showSearch,setShowSearch] = useState(false)
+  const [searchSlider,setSearchSlider] = useState("")
+  const [searchOrder, setSearchOrder] = useState("")
+
+  let [data, setData] = useState([])
+  let [ids,setIds] = useState([])
+  let [path,setPath] = useState("")
+
+  let getSlider=()=>{
+    axios.get(`${apiBaseUrl}slider/view`)
+    .then((res) => res.data)
+    .then((finalRes) =>{
+      if(finalRes.status){
+        setData(finalRes.data)
+        setPath(finalRes.path)
+      }      
+    })
+  }
+
+  useEffect(()=>{
+    getSlider()
+  },[])
+
   return (
     <>
       <section className="w-full p-2">
@@ -10,15 +38,52 @@ export default function ViewSlider() {
         </span>
       </section>
       <hr className="text-gray-500 m-1" />
+      {
+        showSearch && (
+          <div className="bg-white p-3 border-b">
+            <div className="flex items-center border w-[700px] rounded-md px-2 py-1">
+              <input 
+              type="text" 
+              placeholder="Search Slider Title" 
+              value={searchSlider} 
+              onChange={(e)=>setSearchSlider(e.target.value)}
+              className="flex-grow px-2 py-1 outline-none"
+              />
+
+              <input 
+              type="number" 
+              placeholder="Search Order" 
+              value={searchOrder} 
+              onChange={(e)=>setSearchOrder(e.target.value)}
+              className="flex-grow px-2 py-1 outline-none"
+              />
+
+              <button type="button" onClick={getSlider}
+              className="bg-blue-400 hover:bg-blue-500 text-white px-3 py-1 rounded cursor-pointer">
+                &#128269;
+              </button>
+            </div>
+          </div>
+        )
+      }
       <section className="p-5 min-h-[610px]">
         <div className="relative overflow-x-auto bg-neutral-primary-soft shadow-xs rounded-lg border border-1 border-gray-400 ">
           <div className="p-3 flex items-center justify-between bg-gray-100 border-b border-gray-400">
             <span className="font-semibold text-2xl">View Slider</span>
             <div className="flex gap-3">
-              <button className="bg-green-700 hover:bg-green-800 p-3 rounded-lg text-stone-50 font-semibold">
+              <button onClick={()=>setShowSearch(!showSearch)}
+              className="bg-sky-700 hover:bg-sky-800 p-[8px_16px] rounded-lg hover:cursor-pointer">
+                {
+                  showSearch ? 
+                  <FaFilterCircleXmark className=" text-stone-50 text-2xl" />                   
+                  : 
+                  <FaFilter className=" text-stone-50 text-lg" />
+                }
+              </button>
+              <button className="bg-green-700 hover:bg-green-800 p-3 rounded-lg text-stone-50 font-semibold hover:cursor-pointer">
                 Change Status
               </button>
-              <button className="bg-red-700 hover:bg-red-800 p-3 rounded-lg text-stone-50 font-semibold mr-2">
+              <button className="bg-red-700 hover:bg-red-800 p-3 rounded-lg text-stone-50 font-semibold mr-2 hover:cursor-pointer">
                 Delete
               </button>
             </div>
@@ -29,14 +94,9 @@ export default function ViewSlider() {
                 <th scope="col" className="p-4">
                   <div className="flex items-center">
                     <input
-                      id="table-checkbox-20"
                       type="checkbox"
-                      defaultValue=""
-                      className="w-4 h-4 border border-default-medium rounded-xs bg-neutral-secondary-medium focus:ring-2 focus:ring-brand-soft"
+                      className="w-4 h-4 border border-default-medium rounded-xs bg-neutral-secondary-medium"
                     />
-                    <label htmlFor="table-checkbox-20" className="sr-only">
-                      Table checkbox
-                    </label>
                   </div>
                 </th>
                 <th
@@ -72,77 +132,48 @@ export default function ViewSlider() {
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td className="w-4 p-4">
-                  <div className="flex items-center">
-                    <input
-                      id="table-checkbox-21"
-                      type="checkbox"
-                      defaultValue=""
-                      className="w-4 h-4 border border-default-medium rounded-xs bg-neutral-secondary-medium focus:ring-2 focus:ring-brand-soft"
-                    />
-                    <label htmlFor="table-checkbox-21" className="sr-only">
-                      Table checkbox
-                    </label>
-                  </div>
-                </td>
-                <th scope="row" className="px-6 py-4 font-medium text-heading">
-                  Neil Sims
-                </th>
-                <td className="px-6 py-4">
-                  <img
-                    src="https://packshifts.in/images/iso.png"
-                    className="w-10 h-10 rounded-full"
-                  />
-                </td>
-                <td className="px-6 py-4 text-gray-500">1</td>
-                <td className="px-6 py-4">
-                  <button className="p-[8px_16px] bg-green-500 hover:bg-green-600 text-stone-50 font-semibold rounded-lg">
-                    Active
-                  </button>
-                </td>
-                <td className="px-6 py-4">
-                  <button className="p-3 rounded-[50%] bg-sky-700 hover:bg-sky-800">
-                    <MdEdit className="text-stone-50 text-xl" />
-                  </button>
-                </td>
-              </tr>
-
-              <tr>
-                <td className="w-4 p-4">
-                  <div className="flex items-center">
-                    <input
-                      id="table-checkbox-21"
-                      type="checkbox"
-                      defaultValue=""
-                      className="w-4 h-4 border border-default-medium rounded-xs bg-neutral-secondary-medium focus:ring-2 focus:ring-brand-soft"
-                    />
-                    <label htmlFor="table-checkbox-21" className="sr-only">
-                      Table checkbox
-                    </label>
-                  </div>
-                </td>
-                <th scope="row" className="px-6 py-4 font-medium text-heading">
-                  Neil Sims
-                </th>
-                <td className="px-6 py-4">
-                  <img
-                    src="https://packshifts.in/images/iso.png"
-                    className="w-10 h-10 rounded-full"
-                  />
-                </td>
-                <td className="px-6 py-4 text-gray-500">1</td>
-                <td className="px-6 py-4">
-                  <button className="p-[8px_16px] bg-red-500 hover:bg-red-600 text-stone-50 font-semibold rounded-lg">
-                    Deactive
-                  </button>
-                </td>
-                <td className="px-6 py-4">
-                  <button className="p-3 rounded-[50%] bg-sky-700 hover:bg-sky-800">
-                    <MdEdit className="text-stone-50 text-xl" />
-                  </button>
-                </td>
-              </tr>
+              {
+                data.map((slider)=> {
+                  return (
+                    <tr key={slider.id}>
+                      <td className="w-4 p-4">
+                        <div className="flex items-center">
+                          <input
+                            type="checkbox"
+                            className="w-4 h-4 border border-default-medium rounded-xs bg-neutral-secondary-medium"
+                          />
+                        </div>
+                      </td>
+                      <th scope="row" className="px-6 py-4 font-medium text-heading">
+                        {slider.name}
+                      </th>
+                      <td className="px-6 py-4">
+                        <img
+                          src={ path+slider.image } 
+                          alt={`${slider.name} image`}                          
+                          className="w-10 h-10 rounded-full"
+                        />
+                      </td>
+                      <td className="px-6 py-4 text-gray-500">{slider.order}</td>
+                      <td className="px-6 py-4">
+                        <span
+                        className={`px-3 py-1 rounded-full text-white text-sm ${
+                          slider.status === true ? "bg-green-500" : "bg-red-500"
+                        }`}
+                        >
+                          {slider.status === true ? "Active" : "Inactive"}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4">
+                        <button className="p-3 rounded-[50%] bg-sky-700 hover:bg-sky-800">
+                          <MdEdit className="text-stone-50 text-xl hover:cursor-pointer" />
+                        </button>
+                      </td>
+                    </tr>
+                  )}
+                )
+              }
+              
             </tbody>
           </table>
         </div>
