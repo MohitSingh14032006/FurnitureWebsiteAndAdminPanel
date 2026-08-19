@@ -11,6 +11,10 @@ faqRoute.get("/view",
     faqController.view
 )
 
+faqRoute.get("/details/:id",
+    faqController.details
+)
+
 faqRoute.delete("/delete/:id",
     faqController.delete
 )

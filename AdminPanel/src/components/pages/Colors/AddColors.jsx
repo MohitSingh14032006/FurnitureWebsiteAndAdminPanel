@@ -124,7 +124,6 @@ export default function AddColors() {
                 }
             </div>
 
-
             <div className="w-full flex flex-col mb-3">
                 <label className=" font-medium">Color Picker</label>
                 < ColorPicker 
@@ -135,7 +134,6 @@ export default function AddColors() {
                   error?.code && <span className="text-red-600 text-[12px]">{error.code}</span>
                 }
             </div>
-
 
             <div className="w-full flex flex-col mb-20">
                 <label className=" font-medium">Order</label>
@@ -158,9 +156,7 @@ export default function AddColors() {
             >
               {id ? "Update" : "Add"} Color
             </button>
-
-          </form>
-         
+          </form>         
         </div>
       </section>
     </>

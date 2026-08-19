@@ -54,11 +54,28 @@ let faqController = {
     },
 
     view : async(req,res)=>{
-        let data = await faqModel.find()
+        let orCondition = [];
+
+        if(req.query.faqQuestion){
+            orCondition.push({question: new RegExp(req.query.faqQuestion,"i")})
+        }
+        if(req.query.faqAnswer){
+            orCondition.push({answer: req.query.faqAnswer})
+        }
+        if(req.query.faqOrder){
+            orCondition.push({order: req.query.faqOrder})
+        }
+
+        let filter = {};
+        if(orCondition.length>=1){
+            filter.$or = orCondition;
+        }
+
+        let data = await faqModel.find(filter)
         let obj = {
             status: true,
             data,
-            message: "faq viewed"
+            message: "FAQ viewed"
         }
         res.send(obj);
     },
@@ -129,6 +146,17 @@ let faqController = {
         let obj = {
             status: true,
             message:"FAQ's status updated"            
+        }
+        res.send(obj)
+    },
+
+    details: async (req,res)=>{
+        let {id} = req.params;
+        let data = await faqModel.findOne({_id: id})
+        let obj = {
+            status: true,
+            data,
+            message: "FAQ details"
         }
         res.send(obj)
     }

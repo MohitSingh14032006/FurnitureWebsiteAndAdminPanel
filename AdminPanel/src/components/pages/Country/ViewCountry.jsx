@@ -1,25 +1,35 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { FaFilter } from "react-icons/fa";
+import { FaFilterCircleXmark } from "react-icons/fa6";
 import { MdEdit } from "react-icons/md";
+import { Link } from "react-router";
 import { ToastContainer, toast } from 'react-toastify';
 
 export default function ViewCountry() {
   let apiBaseUrl = import.meta.env.VITE_APIBASEURL;
+
+  const [showSearch,setShowSearch] = useState(false);
+  const [searchName,setSearchName] = useState("");
+  const [searchOrder,setSearchOrder] = useState("");
 
   let [data, setData] = useState([]);
   let [ids,setIds] = useState([]);
 
   let getCountry = () => {
     axios
-      .get(`${apiBaseUrl}country/view`)
+      .get(`${apiBaseUrl}country/view`,{
+        params: {
+          name: searchName,
+          order: searchOrder
+        }
+      })
       .then((res) => res.data)
       .then((finalRes) => {
         if (finalRes.status) {
           // console.log(finalRes);
           setData(finalRes.data);
-        } else {
-        }
+        } 
       });
   };
 
@@ -93,13 +103,47 @@ export default function ViewCountry() {
         </span>
       </section>
       <hr className="text-gray-500 m-1" />
+      {
+        showSearch && (
+          <div className="bg-white p-3 border-b">
+            <div className="flex items-center border w-[700px] rounded-md px-2 py-1">
+              <input 
+              type="text" 
+              placeholder="Search Country Name" 
+              value={searchName} 
+              onChange={(e)=>setSearchName(e.target.value)}
+              className="flex-grow px-2 py-1 outline-none"
+              />
+
+              <input 
+              type="number" 
+              placeholder="Search Order" 
+              value={searchOrder} 
+              onChange={(e)=>setSearchOrder(e.target.value)}
+              className="flex-grow px-2 py-1 outline-none"
+              />
+
+              <button type="button" onClick={getCountry}
+              className="bg-blue-400 hover:bg-blue-500 text-white px-3 py-1 rounded cursor-pointer">
+                &#128269;
+              </button>
+            </div>
+          </div>
+        )
+      }
       <section className="p-5 min-h-[610px]">
         <div className="relative overflow-x-auto bg-neutral-primary-soft shadow-xs rounded-lg border border-1 border-gray-400 ">
           <div className="p-3 flex items-center justify-between bg-gray-100 border-b border-gray-400">
             <span className="font-semibold text-2xl">View Country</span>
             <div className="flex gap-3">
-              <button className="bg-sky-700 hover:bg-sky-800 p-[8px_16px] rounded-lg hover:cursor-pointer">
-                <FaFilter className=" text-stone-50 text-lg" />
+              <button onClick={()=>setShowSearch(!showSearch)}
+              className="bg-sky-700 hover:bg-sky-800 p-[8px_16px] rounded-lg hover:cursor-pointer">              
+                {
+                  showSearch ? 
+                  <FaFilterCircleXmark className=" text-stone-50 text-2xl" />                   
+                  : 
+                  <FaFilter className=" text-stone-50 text-lg" />
+                }
               </button>
               <button className="bg-green-700 hover:bg-green-800 p-3 rounded-lg text-stone-50 font-semibold hover:cursor-pointer" onClick={changeStatus}>
                 Change Status
@@ -179,15 +223,17 @@ export default function ViewCountry() {
                           </span>
                       </td>
                       <td className="px-6 py-4">
-                        <button className="p-3 rounded-[50%] bg-sky-700 hover:bg-sky-800 hover:cursor-pointer">
-                          <MdEdit className="text-stone-50 text-xl" />
-                        </button>
+                        <Link to={`/country/update/${obj._id}`}>
+                          <button className="p-3 rounded-[50%] bg-sky-700 hover:bg-sky-800 hover:cursor-pointer">
+                            <MdEdit className="text-stone-50 text-xl" />
+                          </button>
+                        </Link>
                       </td>
                     </tr>
                     )
-                    
-                })
-              }              
+                  }
+                )
+              }
             </tbody>
           </table>
         </div>

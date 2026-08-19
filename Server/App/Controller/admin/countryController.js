@@ -53,11 +53,25 @@ let countryController ={
     },
 
     view : async (req,res)=>{
-        let data = await countryModel.find()
+        let orCondition = [];
+        
+        if(req.query.name){
+            orCondition.push({name: new RegExp(req.query.name,"i")})
+        }
+        if(req.query.order){
+            orCondition.push({order: req.query.order})
+        }
+
+        let filter = {}
+        if(orCondition.length>=1){
+            filter.$or=orCondition;
+        }
+
+        let data = await countryModel.find(filter)
         let obj = {
             status: true,
             data,
-            message: "view country"
+            message: "View country"
         }
         res.send(obj);
     },
@@ -132,6 +146,17 @@ let countryController ={
                 message:"Country Status updated",
             }        
             res.send(obj)
+    },
+
+    details: async(req,res)=>{
+        let {id} = req.params;
+        let data = await countryModel.findOne({_id: id});
+        let obj = {
+            status: true,
+            data,
+            message: "Country Details"
+        }
+        res.send(obj);
     }
 }
 

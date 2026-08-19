@@ -12,9 +12,9 @@ countryRoute.get("/view",
     countryController.view
 )
 
-// countryRoute.get("/details/:id",
-//     countryController.details
-// )
+countryRoute.get("/details/:id",
+    countryController.details
+)
 
 countryRoute.delete("/delete/:id",
     countryController.delete

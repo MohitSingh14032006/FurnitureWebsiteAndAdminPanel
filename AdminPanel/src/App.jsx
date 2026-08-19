@@ -70,7 +70,7 @@ function App() {
 
             <Route path={'/testimonial/add'} element={<AddTeastimonials/>} />
             <Route path={'/testimonial/view'} element={<ViewTestimonials/>} />
-
+            
             <Route path={'/faq/add'} element={<AddFAQ/>} />
             <Route path={'/faq/view'} element={<ViewFAQ/>} />
             <Route path={'/faq/update/:id'} element={<AddFAQ/>}/>

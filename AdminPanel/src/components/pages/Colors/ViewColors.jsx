@@ -114,7 +114,7 @@ export default function ViewColors() {
               placeholder="Search Name" 
               value={searchName} 
               onChange={(e)=>setSearchName(e.target.value)}
-              className="flex-grow px-2 py-1 outline-none"
+              className="flex-grow px-2 py-1 "
               />
 
               <input 

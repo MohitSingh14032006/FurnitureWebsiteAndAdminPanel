@@ -1,26 +1,39 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { FaFilter } from "react-icons/fa";
+import { FaFilterCircleXmark } from "react-icons/fa6";
 import { MdEdit } from "react-icons/md";
+import { Link } from "react-router";
 import { ToastContainer, toast } from 'react-toastify';
 
 export default function ViewFAQ() {
   let apiBaseUrl = import.meta.env.VITE_APIBASEURL;
 
+  const [showSearch,setShowSearch] = useState(false)
+  const [searchQuestion,setSearchQuestion] = useState("")
+  const [searchAnswer,setSearchAnswer] = useState("")
+  const [searchOrder,setSearchOrder] = useState("")
+
   let [data, setData] = useState([]);
   let [ids,setIds] = useState([]);
 
-  let getFAQ = () => {
-    axios.get(`${apiBaseUrl}faq/view`)
-    .then((res)=>res.data)
-    .then((finalRes)=>{
-      if(finalRes.status){
+  const getFAQ = () => {
+    axios.get(`${apiBaseUrl}faq/view`, {
+      params: {
+        question: searchQuestion,
+        answer: searchAnswer,
+        order: searchOrder
+      }
+    })
+    .then((res) => res.data)
+    .then((finalRes) => {
+      if (finalRes.status) {
         setData(finalRes.data);
-      }else{
-      }      
+      }
     });
   };
 
-  useEffect(()=>{
+  useEffect(() => {
     getFAQ();
   },[])
 
@@ -86,15 +99,63 @@ export default function ViewFAQ() {
       <ToastContainer/>
       <section className="w-full p-2">
         <span className="text-gray-700 font-medium text-lg">
-          Home / Faq / View
+          Home / FAQ / View
         </span>
       </section>
       <hr className="text-gray-500 m-1" />
+      {
+        showSearch && (
+          <div className="bg-white p-3 border-b">
+            <div className="flex items-center border w-[700px] rounded-md px-2 py-1">
+              <input 
+              type="text" 
+              placeholder="Search Question" 
+              value={searchQuestion} 
+              onChange={(e)=>setSearchQuestion(e.target.value)}
+              className="flex-grow px-2 py-1 outline-none"
+              />
+
+              <input 
+              type="text" 
+              placeholder="Search Answer" 
+              value={searchAnswer} 
+              onChange={(e)=>setSearchAnswer(e.target.value)}
+              className="flex-grow px-2 py-1 outline-none"
+              />
+
+              <input 
+              type="number" 
+              placeholder="Search Order" 
+              value={searchOrder} 
+              onChange={(e)=>setSearchOrder(e.target.value)}
+              className="flex-grow px-2 py-1 outline-none"
+              />
+
+              <button
+                type="button"
+                onClick={getFAQ}
+                className="bg-blue-400 hover:bg-blue-500 text-white px-3 py-1 rounded cursor-pointer"
+              >
+                &#128269;
+              </button>
+            </div>
+          </div>
+        )
+      }
       <section className="p-5 min-h-[610px]">
         <div className="relative overflow-x-auto bg-neutral-primary-soft shadow-xs rounded-lg border border-1 border-gray-400 ">
           <div className="p-3 flex items-center justify-between bg-gray-100 border-b border-gray-400">
             <span className="font-semibold text-2xl">View FAQ</span>
             <div className="flex gap-3">
+              <button onClick={()=>setShowSearch(!showSearch)}
+              className="bg-sky-700 hover:bg-sky-800 p-[8px_16px] rounded-lg hover:cursor-pointer">              
+                {
+                  showSearch ? 
+                  <FaFilterCircleXmark className=" text-stone-50 text-2xl" />                   
+                  : 
+                  <FaFilter className=" text-stone-50 text-lg" />
+                }
+              </button>
               <button className="bg-green-700 hover:bg-green-800 p-3 rounded-lg text-stone-50 font-semibold hover:cursor-pointer" onClick={changeStatus}>
                 Change Status
               </button>
@@ -182,9 +243,11 @@ export default function ViewFAQ() {
                         </span>
                       </td>
                       <td className="px-6 py-4">
+                      <Link to={`/faq/update/${obj._id}`}>
                         <button className="p-3 rounded-[50%] bg-sky-700 hover:bg-sky-800 hover:cursor-pointer">
                           <MdEdit className="text-stone-50 text-xl" />
                         </button>
+                      </Link>
                       </td>
                     </tr>
                   )
