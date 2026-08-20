@@ -14,6 +14,7 @@ let storage = multer.diskStorage(
     }
 )
 
+const upload = multer({storage})
 userRoutes.post(
     "/register", authController.register
 )
@@ -23,7 +24,6 @@ userRoutes.post(
 )
 
 //After login
-let uploads = multer.uploads({storage})
 userRoutes.post(
     "/change-password", authController.changePassword
 )

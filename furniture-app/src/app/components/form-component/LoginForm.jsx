@@ -2,54 +2,13 @@
 import Link from 'next/link'
 import react from 'react'
 import { useRouter } from "next/navigation";
-import axios from 'axios';
-import iziToast from 'izitoast';
-import { setToken } from '@/redux/userSlice';
-import { useDispatch } from 'react-redux';
 
 
 export default function LoginForm() {
     const router = useRouter();
-    let apiBaseUrl = process.env.NEXT_PUBLIC_APIBASEURL;
-
-      let dispatch = useDispatch()
-
     let handleLogin = (e)=>{
-       e.preventDefault()
-      let obj={
-        email:e.target.email.value,
-        password:e.target.password.value
-      }
-
-    
-
-      axios.post(`${apiBaseUrl}auth/login`,obj)
-      .then((response) => response.data)
-      .then((data) => {
-        if (data.status === 1) {
-          iziToast.success({
-            title: "Success",
-            message:" Login Successfully",
-          })
-          console.log(data.token)
-          dispatch(setToken({token:data.token}))
-          router.push("/dashboard")
-          
-        }
-        else{
-          iziToast.error({
-            position: 'topRight',
-            title: "Error",
-            message: data.msg,
-          });
-        }
-      })
-
-     
-      
-        // alert("Login Successfully")
-       
-        // 
+        e.preventDefault()
+        router.push('/dashboard')
     }
   return (
       <div className="flex flex-1 items-center justify-center p-8 sm:p-10 lg:p-10">
@@ -67,7 +26,6 @@ export default function LoginForm() {
               <input
                 id="email"
                 type="email"
-                name="email"
                 placeholder="you@example.com"
                 className="w-full rounded-xl border border-orange-100 bg-white px-4 py-3 text-sm outline-none transition focus:border-orange-dim focus:ring-2 focus:ring-orange-dim/20"
               />
@@ -80,7 +38,6 @@ export default function LoginForm() {
               <input
                 id="password"
                 type="password"
-                name="password"
                 placeholder="Enter your password"
                 className="w-full rounded-xl border border-orange-100 bg-white px-4 py-3 text-sm outline-none transition focus:border-orange-dim focus:ring-2 focus:ring-orange-dim/20"
               />

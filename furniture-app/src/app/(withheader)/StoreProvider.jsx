@@ -1,5 +1,5 @@
 "use client";
-import 'izitoast/dist/css/iziToast.min.css';
+
 import { store } from "@/redux/store";
 import { Provider } from "react-redux";
 

@@ -76,7 +76,7 @@ let authController = {
         try{
             let token = req.headers.authorization.split(" ")[1];  //string to array
             let {id} = jwt.verify(token, process.env.TOKENKEY);
-            console.log(id);
+            // console.log(id);
             let userData = await userModel.findOne({_id:id})
             let dbPassword = userData.password
             // res.send("Hello")
@@ -123,7 +123,35 @@ let authController = {
 
     updateProfile: async(req,res) =>{
         let {phone, address, name} = req.body
-    }
-}
+        let token = req.headers.authorization.split(" ")[1]; 
+        let {id} = jwt.verify(token, process.env.TOKENKEY);
+        let updateObj = {
+            phone,
+            name,
+            address,
+        }
+
+        if(req.file){
+            if(req.file.filename){
+                updateObj['image'] = req.file.filename
+            }
+        }
+
+        await userModel.updateOne(
+            {
+                _id: id,
+            },
+            {
+                $set: updateObj,
+            },
+        );
+        res.send(
+            {
+                status: 1,
+                message: "Profile Updated",
+            }
+        );
+    },
+};
 
 module.exports = authController

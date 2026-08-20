@@ -10,9 +10,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { deleteCart } from "@/redux/cartSlice";
 import Swal from "sweetalert2";
 import "sweetalert2/src/sweetalert2.scss";
-import { logout } from "@/redux/userSlice";
-import { useRouter } from "next/router";
-import { redirect } from "next/navigation";
 
 const menuItems = [
   {
@@ -91,28 +88,17 @@ const menuItems = [
 ];
 
 export default function Header() {
-
-
   const [activeMenu, setActiveMenu] = useState(null);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [openMenu, setOpenMenu] = useState(null);
+  const [openMenu,setOpenMenu] = useState(null);
   const [isCartOpen, setIsCartOpen] = useState(false);
-   
+
   let dispatch = useDispatch();
   let cart = useSelector((myStore) => myStore.cartStore.cart);
   let total = cart.reduce(
     (acc, obj) => (acc += obj.quantity * obj.original_price),
     0,
   );
-
-  let token = useSelector((myStore) => myStore.userStore.token);
-  console.log(token);
-
-  let handleLogout = () => {
-    dispatch(logout());
-    redirect("/login");
-    
-  }
 
   return (
     <header className="z-50 bg-white/95 border-b-1 border-gray-200">
@@ -181,25 +167,10 @@ export default function Header() {
             Contact us 24/7 : +91-98745612330 / furniture@gmail.com
           </p>
           <div className="flex items-center gap-4">
-            {token ? (
-              <div>
-                <span
-                  className={`flex items-center gap-1 text-[12px] font-rubik`}
-                >
-                  <Link href={"/dashboard"}>Dashboard</Link>/
-                  <button onClick={handleLogout} className="text-[12px] font-rubik">
-                    Logout
-                  </button>
-                </span>
-              </div>
-            ) : (
-              <span
-                className={`flex items-center gap-1 text-[12px] font-rubik`}
-              >
-                <Link href={"/login"}>Login</Link>/
-                <Link href={"/register"}>Register</Link>
-              </span>
-            )}
+            <span className={`flex items-center gap-1 text-[12px] font-rubik`}>
+              <Link href={"/login"}>Login</Link>/
+              <Link href={"/register"}>Register</Link>
+            </span>
           </div>
         </div>
       </div>
@@ -291,6 +262,7 @@ export default function Header() {
                   className="text-[12.5px] font-rubik font-semibold tracking-wide text-dark-gray transition hover:text-orange-dim uppercase py-4"
                 >
                   {menu.name}
+                  
                 </a>
                 {/* Mega Menu */}
                 {activeMenu === index && menu.megaMenu && (
@@ -330,7 +302,7 @@ export default function Header() {
               </p>
               <p className="text-sm font-rubik">furniture@gmail.com</p>
             </div>
-
+            
             <nav>
               <ul className="flex md:flex-row flex-col gap-2">
                 {menuItems.map((menu, index) => (
@@ -342,6 +314,7 @@ export default function Header() {
                       className="w-full text-left border-b border-gray-200 px-3 py-2 text-sm font-semibold text-dark-gray transition hover:text-orange-dim uppercase"
                     >
                       {menu.name}
+
                     </button>
 
                     {openMenu === index && (
